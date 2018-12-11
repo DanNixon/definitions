@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="nxdlformat.xsl" ?>
+<!--
+# NeXus - Neutron and X-ray Common Data Format
+# 
+# Copyright (C) 2008-2018 NeXus International Advisory Committee (NIAC)
+# 
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 3 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+# For further information, see http://www.nexusformat.org
+-->
+<definition name="NXtomotof" extends="NXtomo" type="group"
+    category="application"
+    xmlns="http://definition.nexusformat.org/nxdl/3.1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd"
+  >
+
+	<symbols>
+		<doc>These symbols will be used below to coordinate datasets with the same shape.</doc>
+		<symbol name="nBins"><doc>number of time bins</doc></symbol>
+	</symbols>
+
+  <doc>
+    Extensions of :ref:`NXtomo` used for storing time resolved tomography raw
+    data.
+  </doc>
+
+  <group type="NXentry" name="entry">
+    <field name="definition">
+      <doc> Official NeXus NXDL schema to which this file conforms </doc>
+      <enumeration>
+        <item value="NXtomotof"/>
+      </enumeration>
+    </field>
+
+    <group type="NXinstrument" name="instrument">
+      <group type="NXdetector" name="detector">
+        <field name="data" type="NX_INT" signal="1">
+          <dimensions rank="4">
+            <dim index="1" value="nFrames" />
+            <dim index="2" value="xsize" />
+            <dim index="3" value="ysize" />
+            <dim index="4" value="nBins" />
+          </dimensions>
+        </field>
+        <field name="tof_bin_edges" type="NX_INT" >
+          <dimensions rank="1">
+            <dim index="1" value="nBins + 1" />
+          </dimensions>
+        </field>
+      </group>
+    </group>
+
+    <group type="NXmonitor" name="control" minOccurs="0" maxOccurs="1"> 
+      <field name="data" type="NX_FLOAT" units="NX_ANY">
+        <doc>
+          Beam monitor spectrum per frame. Allows for correction for
+          fluctuations in the beam between frames.
+        </doc>
+        <dimensions rank="2">
+          <dim index="1" value="nFrames" />
+          <dim index="2" value="nBins" />
+        </dimensions>
+      </field>
+    </group>
+  </group>
+</definition>
